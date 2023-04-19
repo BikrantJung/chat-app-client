@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Button } from "./components/ui/button";
+import { createBrowserRouter } from "react-router-dom";
 import Login from "./components/pages/Login.page";
+import { Main } from "./components/pages/Main.page";
 
-function App() {
+export function App({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     let currentTheme = localStorage.getItem("theme");
@@ -13,18 +14,10 @@ function App() {
     document.documentElement.classList.add(currentTheme);
     setLoading(false);
   }, []);
-
-  return (
-    <>
-      {loading ? (
-        ""
-      ) : (
-        <div>
-          <Login />
-        </div>
-      )}
-    </>
-  );
+  return <>{loading ? "" : children}</>;
 }
 
-export default App;
+export const router = createBrowserRouter([
+  { path: "/", element: <Login /> },
+  { path: "/chat", element: <Main /> },
+]);
