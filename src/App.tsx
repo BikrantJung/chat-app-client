@@ -25,22 +25,12 @@ export function App({ children }: { children: React.ReactNode }) {
   );
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    // let currentTheme = localStorage.getItem("theme");
-    // if (!currentTheme) {
-    //   localStorage.setItem("theme", "dark");
-    //   return;
-    // }
-    // document.documentElement.classList.add(currentTheme);
-
-    const _user: unknown = localStorage.getItem("userInfo") || null;
-    console.log(_user);
-    if (!_user) {
-      setUser(null);
-      setLoading(false);
+    let currentTheme = localStorage.getItem("theme");
+    if (!currentTheme) {
+      localStorage.setItem("theme", "dark");
       return;
     }
-    const userInfo = _user as IUserInfo;
-    setUser(userInfo);
+    document.documentElement.classList.add(currentTheme);
     setLoading(false);
   }, []);
   return (

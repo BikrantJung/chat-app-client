@@ -27,17 +27,6 @@ function useLoginUser() {
         username,
         _id,
       }: IUserInfo = data;
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify({
-          createdAt,
-          email,
-          jwt_token,
-          profilePicture,
-          username,
-          _id,
-        })
-      );
       // Set user updates the states and automatically navigates according to useEffect
       setUser({ _id, createdAt, email, jwt_token, profilePicture, username });
       toast.success("Logged in successfully");
