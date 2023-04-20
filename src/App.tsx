@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
-import { createBrowserRouter, useNavigate } from "react-router-dom";
-import Login from "./components/pages/Login.page";
-import { Main } from "./components/pages/Main.page";
-import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useUserStore } from "./store/useUserStore";
-import { IUserInfo } from "./types/user.types";
-import path from "path";
+import { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
+import { createBrowserRouter } from "react-router-dom";
+import Login from "./components/pages/Login.page";
+import { Main } from "./components/pages/Main.page";
+import { useThemeStore } from "./store/useThemeStore";
 
 export function App({ children }: { children: React.ReactNode }) {
-  const { setUser, userInfo } = useUserStore((state) => state);
+  const { theme } = useThemeStore((state) => state);
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -25,14 +23,10 @@ export function App({ children }: { children: React.ReactNode }) {
   );
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    let currentTheme = localStorage.getItem("theme");
-    if (!currentTheme) {
-      localStorage.setItem("theme", "dark");
-      return;
-    }
-    document.documentElement.classList.add(currentTheme);
+    document.documentElement.className = "";
+    document.documentElement.className = theme;
     setLoading(false);
-  }, []);
+  }, [theme]);
   return (
     <>
       {loading ? (

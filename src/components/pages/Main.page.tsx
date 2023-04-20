@@ -1,6 +1,7 @@
 import { useUserStore } from "@/store/useUserStore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../section/Navbar";
 
 function Main() {
   const navigate = useNavigate();
@@ -16,7 +17,18 @@ function Main() {
     setLoading(false);
   }, [userInfo]);
 
-  return <> {loading ? "" : <div>Chat</div>} </>;
+  return (
+    <>
+      {" "}
+      {loading ? (
+        ""
+      ) : (
+        <div>
+          <Navbar />
+        </div>
+      )}{" "}
+    </>
+  );
 }
 
 export { Main };
