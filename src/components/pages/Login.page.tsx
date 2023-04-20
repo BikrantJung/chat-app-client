@@ -15,10 +15,10 @@ function Login() {
             </TabsTrigger>
           </TabsList>
           <div className="border px-3 py-1 rounded-md mt-3">
-            <TabsContent value="login" className="flex flex-col gap-4">
+            <TabsContent value="login">
               <LoginTab />
             </TabsContent>
-            <TabsContent value="register" className="flex flex-col gap-4">
+            <TabsContent value="register">
               <RegisterTab />
             </TabsContent>
           </div>
