@@ -1,7 +1,6 @@
-import React from "react";
+import LoginTab from "../section/Login.section";
+import RegisterTab from "../section/Register.section";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 function Login() {
   return (
     <div className="h-screen flex items-center justify-center">
@@ -17,42 +16,10 @@ function Login() {
           </TabsList>
           <div className="border px-3 py-1 rounded-md mt-3">
             <TabsContent value="login" className="flex flex-col gap-4">
-              <div>
-                <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                  Login
-                </h3>
-                <p>Login in to your account.</p>
-              </div>
-              <div className="flex gap-1 flex-col">
-                <h4>Username</h4>
-                <Input />
-              </div>
-              <div className="flex gap-1 flex-col">
-                <h4>Password</h4>
-                <Input />
-              </div>
-              <Button>Login</Button>
+              <LoginTab />
             </TabsContent>
             <TabsContent value="register" className="flex flex-col gap-4">
-              <div>
-                <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                  Register
-                </h3>
-                <p>Create your account here.</p>
-              </div>
-              <div className="flex gap-1 flex-col">
-                <h4>Username</h4>
-                <Input />
-              </div>
-              <div className="flex gap-1 flex-col">
-                <h4>Email</h4>
-                <Input />
-              </div>
-              <div className="flex gap-1 flex-col">
-                <h4>Password</h4>
-                <Input />
-              </div>
-              <Button>Register</Button>
+              <RegisterTab />
             </TabsContent>
           </div>
         </Tabs>
