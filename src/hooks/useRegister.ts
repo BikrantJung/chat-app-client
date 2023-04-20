@@ -1,5 +1,6 @@
 import { axios } from "@/lib/axios";
-import { IUserRegister, RegisterResponse } from "@/types/user.types";
+import { useUserStore } from "@/store/useUserStore";
+import { IUserInfo, IUserRegister } from "@/types/user.types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
@@ -12,6 +13,7 @@ async function createUser(registerInput: IUserRegister) {
   });
 }
 function useCreateUser() {
+  const { setUser } = useUserStore((state) => state);
   const navigate = useNavigate();
   return useMutation(
     (registerInput: IUserRegister) => createUser(registerInput),
@@ -28,7 +30,8 @@ function useCreateUser() {
           jwt_token,
           profilePicture,
           username,
-        }: RegisterResponse = data;
+          _id,
+        }: IUserInfo = data;
         localStorage.setItem(
           "userInfo",
           JSON.stringify({
@@ -37,11 +40,11 @@ function useCreateUser() {
             jwt_token,
             profilePicture,
             username,
+            _id,
           })
         );
-
+        setUser({ _id, createdAt, email, jwt_token, profilePicture, username });
         toast.success("Registered successfully");
-        navigate("/chat");
       },
     }
   );

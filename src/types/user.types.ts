@@ -8,10 +8,11 @@ export type IUserLogin = {
   email: string;
   password: string;
 };
-export type RegisterResponse = {
+export type IUserInfo = {
   createdAt: string;
   email: string;
   jwt_token: string;
   profilePicture: string;
   username: string;
+  _id: string;
 };

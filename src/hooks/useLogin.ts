@@ -1,5 +1,6 @@
 import { axios } from "@/lib/axios";
-import { IUserLogin, RegisterResponse } from "@/types/user.types";
+import { useUserStore } from "@/store/useUserStore";
+import { IUserInfo, IUserLogin } from "@/types/user.types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
@@ -8,6 +9,7 @@ async function loginUser(loginInput: IUserLogin) {
   return await axios.post("/user/login", loginInput);
 }
 function useLoginUser() {
+  const { setUser } = useUserStore((state) => state);
   const navigate = useNavigate();
   return useMutation((loginInput: IUserLogin) => loginUser(loginInput), {
     onError(error: AxiosError) {
@@ -23,7 +25,8 @@ function useLoginUser() {
         jwt_token,
         profilePicture,
         username,
-      }: RegisterResponse = data;
+        _id,
+      }: IUserInfo = data;
       localStorage.setItem(
         "userInfo",
         JSON.stringify({
@@ -32,10 +35,12 @@ function useLoginUser() {
           jwt_token,
           profilePicture,
           username,
+          _id,
         })
       );
+      // Set user updates the states and automatically navigates according to useEffect
+      setUser({ _id, createdAt, email, jwt_token, profilePicture, username });
       toast.success("Logged in successfully");
-      navigate("/chat");
     },
   });
 }
