@@ -2,10 +2,13 @@ import { useUserStore } from "@/store/useUserStore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../section/Navbar";
+import { useFetchChats } from "@/hooks/queries/useFetchAllChats";
 
 function Main() {
-  const navigate = useNavigate();
   const { setUser, userInfo } = useUserStore((state) => state);
+
+  const navigate = useNavigate();
+  const { data, isLoading } = useFetchChats(userInfo?.jwt_token);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     console.log("FROM MAIN MAGE");

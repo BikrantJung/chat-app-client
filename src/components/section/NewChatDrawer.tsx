@@ -17,6 +17,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../atoms/avatar";
 import { Skeleton } from "../atoms/skeleton";
+import { useAccessChat } from "@/hooks/mutations/useAccessChat";
+import { NewChatResults } from "../ui/NewChatResult";
 
 export function NewChatDrawer() {
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ export function NewChatDrawer() {
     query,
     userInfo?.jwt_token
   );
-  console.log("DATA", data);
+
   const handleQueryChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
     try {
@@ -80,31 +82,8 @@ export function NewChatDrawer() {
           ""
         )}
         {data ? (
-          <div className="grid gap-8 py-4">
-            {data.map((item) => {
-              return (
-                <div key={item._id} className="flex items-center gap-2">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage src={item.profilePicture} />
-                    <AvatarFallback>{item.username}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col">
-                    <h4 className="scroll-m-20 font-semibold tracking-tight">
-                      {item.username}
-                    </h4>
-                    <p className="text-xs">{item.email}</p>
-                  </div>
-                  <div className="ml-auto" />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => navigate("/chat")}
-                  >
-                    <ChatBubble className="icon" />
-                  </Button>
-                </div>
-              );
-            })}
+          <div className="w-full h-full">
+            <NewChatResults userInfo={data} />
           </div>
         ) : (
           ""

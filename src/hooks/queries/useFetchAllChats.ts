@@ -16,7 +16,6 @@ async function fetchChats(
 }
 function useFetchChats(token?: string) {
   return useQuery(["chats"], () => fetchChats(token), {
-    enabled: false,
     onError(error: AxiosError) {
       if (error.response?.data) {
         Object.values(error.response.data).map((item) =>
