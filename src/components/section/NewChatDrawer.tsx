@@ -29,6 +29,7 @@ export function NewChatDrawer() {
     query,
     userInfo?.jwt_token
   );
+  console.log("Query", query);
 
   const handleQueryChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);

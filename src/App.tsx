@@ -17,6 +17,7 @@ export function App({ children }: { children: React.ReactNode }) {
             refetchOnWindowFocus: false,
             refetchOnMount: false,
             staleTime: 300000, // 5 minutes
+            retry: false,
           },
         },
       })

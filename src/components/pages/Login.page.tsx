@@ -34,7 +34,7 @@ function Login() {
                   Register
                 </TabsTrigger>
               </TabsList>
-              <div className="border px-3 py-1 rounded-md mt-3">
+              <div className="border bg-background text-foreground px-3 py-1 rounded-md mt-3">
                 <TabsContent value="login">
                   <LoginTab />
                 </TabsContent>
