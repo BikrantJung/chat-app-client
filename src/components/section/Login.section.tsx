@@ -5,7 +5,7 @@ import { useLoginUser } from "@/hooks/mutations/useLogin";
 import { toast } from "react-hot-toast";
 
 function LoginTab() {
-  const { mutate, isLoading } = useLoginUser();
+  const { mutate, isLoading, error } = useLoginUser();
   const [email, setEmail] = useState("bikrant1@gmail.com");
   const [password, setPassword] = useState("bikrant1@gmail.com");
 
@@ -40,6 +40,7 @@ function LoginTab() {
           Login
         </h3>
         <p>Login in to your account.</p>
+        <p>{JSON.stringify(error)}</p>
       </div>
       <div className="flex gap-1 flex-col">
         <label className="text-sm" htmlFor="email">

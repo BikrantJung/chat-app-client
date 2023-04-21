@@ -4,12 +4,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../atoms/dropdown";
+import { useUserStore } from "@/store/useUserStore";
+import ThemeChangerSwitch from "./ThemeChangerSwitch";
 
 function ProfileDropdown() {
+  const { resetUser } = useUserStore((state) => state);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer" asChild>
@@ -25,7 +26,12 @@ function ProfileDropdown() {
         <DropdownMenuItem className="gap-1">
           <Settings className="icon" /> <span>Settings</span>
         </DropdownMenuItem>
-        <DropdownMenuItem className="gap-1">
+        <DropdownMenuItem
+          className="gap-1"
+          onClick={() => {
+            resetUser();
+          }}
+        >
           <LogOut className="icon" /> <span>Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

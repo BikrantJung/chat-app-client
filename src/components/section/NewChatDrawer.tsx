@@ -38,12 +38,13 @@ export function NewChatDrawer() {
       console.log(error);
     }
   };
+  console.log(data, "DATA");
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Button size="sm">
           <Plus className="icon" />
-          <span>New Chat</span>
+          <span className=" hidden sm:block">New Chat</span>
         </Button>
       </SheetTrigger>
       <SheetContent position="right">
@@ -82,7 +83,7 @@ export function NewChatDrawer() {
         ) : (
           ""
         )}
-        {data ? (
+        {data?.length ? (
           <div className="w-full h-full">
             <NewChatResults userInfo={data} />
           </div>

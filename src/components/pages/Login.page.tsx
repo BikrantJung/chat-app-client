@@ -25,7 +25,7 @@ function Login() {
       ) : (
         <div className="h-screen flex items-center justify-center">
           <div className="">
-            <Tabs defaultValue="login" className="w-[400px]">
+            <Tabs defaultValue="login" className="w-[300px] md:w-[400px]">
               <TabsList className="w-full">
                 <TabsTrigger value="login" className="w-full">
                   Login
