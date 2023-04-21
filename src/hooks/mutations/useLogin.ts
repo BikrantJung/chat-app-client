@@ -14,7 +14,9 @@ function useLoginUser() {
   return useMutation((loginInput: IUserLogin) => loginUser(loginInput), {
     onError(error: AxiosError) {
       if (error.response?.data) {
-        Object.values(error.response.data).map((item) => toast.error(item));
+        Object.values(error.response.data).map((item) =>
+          toast.error(JSON.stringify(item))
+        );
       }
     },
 

@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button } from "../atoms/button";
+import { Input } from "../atoms/input";
 import { imageExtensions } from "@/lib/imageExtensions";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import { useCreateUser } from "@/hooks/useRegister";
+import { useCreateUser } from "@/hooks/mutations/useRegister";
 function RegisterTab() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [username, setUsername] = useState("");

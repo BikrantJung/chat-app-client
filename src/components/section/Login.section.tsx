@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { useLoginUser } from "@/hooks/useLogin";
+import { Button } from "../atoms/button";
+import { Input } from "../atoms/input";
+import { useLoginUser } from "@/hooks/mutations/useLogin";
 import { toast } from "react-hot-toast";
 
 function LoginTab() {

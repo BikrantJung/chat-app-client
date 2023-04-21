@@ -11,7 +11,7 @@ export type IUserLogin = {
 export type IUserInfo = {
   createdAt: string;
   email: string;
-  jwt_token: string;
+  jwt_token?: string;
   profilePicture: string;
   username: string;
   _id: string;

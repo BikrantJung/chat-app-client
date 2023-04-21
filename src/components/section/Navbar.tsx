@@ -1,14 +1,16 @@
-import React from "react";
-import { Bell } from "iconoir-react";
-import { Button } from "../ui/button";
 import ThemeChanger from "../ui/ThemeChanger";
+import ProfileDropdown from "../ui/ProfileDropdown";
+import Notification from "../ui/notification/Notification";
+import { NewChatDrawer } from "./NewChatDrawer";
 function Navbar() {
   return (
-    <div className="border-b px-8 py-8">
-      <Button variant={"ghost"}>
-        <Bell />
-      </Button>
-      <ThemeChanger />
+    <div className="px-8 py-8 flex items-center justify-end gap-8">
+      <div className="flex items-center gap-2">
+        <NewChatDrawer />
+        <Notification />
+        <ThemeChanger />
+      </div>
+      <ProfileDropdown />
     </div>
   );
 }

@@ -19,8 +19,8 @@ const buttonVariants = cva(
         link: "underline-offset-4 hover:underline text-primary",
       },
       size: {
-        default: "h-10 py-2 px-4",
-        sm: "h-9 px-3 rounded-md",
+        default: "h-10 py-2 px-3",
+        sm: "h-9 px-3 rounded-md text-xs",
         lg: "h-11 px-8 rounded-md",
       },
     },
@@ -68,7 +68,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             </svg>
           </div>
         )}
-        <div className={`${loading ? "opacity-0" : "opacity-100"}`}>
+        <div
+          className={` inline-flex items-center gap-1 ${
+            loading ? "opacity-0" : "opacity-100"
+          }`}
+        >
           {children}
         </div>
       </button>

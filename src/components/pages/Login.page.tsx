@@ -1,7 +1,7 @@
 import { useUserStore } from "@/store/useUserStore";
 import LoginTab from "../section/Login.section";
 import RegisterTab from "../section/Register.section";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../atoms/tabs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 function Login() {

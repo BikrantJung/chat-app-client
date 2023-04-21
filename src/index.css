@@ -81,3 +81,8 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+@layer components {
+  .icon {
+    @apply h-5 w-5 stroke-[1.2px];
+  }
+}
