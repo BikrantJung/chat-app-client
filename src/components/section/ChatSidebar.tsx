@@ -25,7 +25,7 @@ function ChatSidebar(props: ChatSidebarProps) {
       <ScrollArea className="h-[75vh] w-full rounded-md">
         {chats.map((chat) => (
           <React.Fragment key={chat._id}>
-            <Link to={"/chat"}>
+            <Link to={`/chat/${chat._id}`}>
               <div className="flex items-center gap-2 px-3 mb-1 shadow bg-background  pt-2 pb-4  border rounded-lg text-foreground">
                 <Avatar className="relative h-10 w-10 top-2">
                   <AvatarImage

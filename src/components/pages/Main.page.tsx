@@ -1,6 +1,6 @@
 import { useUserStore } from "@/store/useUserStore";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import { useFetchChats } from "@/hooks/queries/useFetchAllChats";
 import Navbar from "../section/Navbar";
@@ -34,12 +34,10 @@ function Main() {
           <Navbar />
           {data?.length ? (
             <div className="flex px-8 gap-4 flex-1 justify-center lg:justify-normal ">
-              <div className="flex-1 max-w-max ">
+              <div className="flex-1 border-r pr-3 max-w-max ">
                 <ChatSidebar chats={data} isLoading={isLoading} />
               </div>
-              <div className="flex-[3_3_0%] border rounded bg-background p-4 text-foreground hidden lg:flex">
-                <p>Content goes here</p>
-              </div>
+              <Outlet />
             </div>
           ) : (
             <div className="flex items-center flex-col">

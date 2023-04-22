@@ -5,4 +5,5 @@ export type IMessage = {
   content: string;
   chat: IChat;
   sender: IUserInfo;
+  _id: string;
 };

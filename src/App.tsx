@@ -6,6 +6,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Login from "./components/pages/Login.page";
 import { Main } from "./components/pages/Main.page";
 import { useThemeStore } from "./store/useThemeStore";
+import ChatBox from "./components/section/ChatBox";
 
 export function App({ children }: { children: React.ReactNode }) {
   const { theme } = useThemeStore((state) => state);
@@ -45,5 +46,14 @@ export function App({ children }: { children: React.ReactNode }) {
 
 export const router = createBrowserRouter([
   { path: "/", element: <Login /> },
-  { path: "/chat", element: <Main /> },
+  {
+    path: "/chat",
+    element: <Main />,
+    children: [
+      {
+        path: "/chat/:chatId",
+        element: <ChatBox />,
+      },
+    ],
+  },
 ]);
