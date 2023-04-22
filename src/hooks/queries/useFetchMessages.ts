@@ -1,6 +1,5 @@
 import { axios } from "@/lib/axios";
 import { useUserStore } from "@/store/useUserStore";
-import { IChat } from "@/types/chat.types";
 import { IMessage } from "@/types/message.types";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";

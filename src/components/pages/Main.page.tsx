@@ -24,6 +24,7 @@ function Main() {
     setLoading(false);
   }, [userInfo]);
 
+  console.log("CHATS FROM MAIN================>", data);
   return (
     <>
       {" "}

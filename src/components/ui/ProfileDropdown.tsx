@@ -8,8 +8,11 @@ import {
 } from "../atoms/dropdown";
 import { useUserStore } from "@/store/useUserStore";
 import ThemeChangerSwitch from "./ThemeChangerSwitch";
+import { QueryCache, useQueryClient } from "@tanstack/react-query";
 
 function ProfileDropdown() {
+  const queryCache = new QueryCache();
+  const queryClient = useQueryClient();
   const { resetUser, userInfo } = useUserStore((state) => state);
   return (
     <DropdownMenu>
@@ -30,6 +33,7 @@ function ProfileDropdown() {
           className="gap-1"
           onClick={() => {
             resetUser();
+            queryCache.clear();
           }}
         >
           <LogOut className="icon" /> <span>Log out</span>
