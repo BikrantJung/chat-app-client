@@ -5,6 +5,9 @@ import { ScrollArea } from "../atoms/scroll-area";
 import { Avatar, AvatarImage } from "../atoms/avatar";
 import { Link } from "react-router-dom";
 import { Skeleton } from "../atoms/skeleton";
+import { Button } from "../atoms/button";
+import { Plus } from "iconoir-react";
+import { NewGroupChatModal } from "./NewGroupChatModal";
 
 interface ChatSidebarProps {
   chats: IChat[];
@@ -16,9 +19,15 @@ function ChatSidebar(props: ChatSidebarProps) {
   let isLoading = true;
   return (
     <div className="h-full gap-3">
+      <div className="flex mb-2 justify-between items-center">
+        <h4 className="scroll-m-20 text-4xl text-foreground font-semibold tracking-tight">
+          Chats
+        </h4>
+        <NewGroupChatModal />
+      </div>
       <ScrollArea className="h-[80vh] w-full rounded-md">
         {chats.map((chat) => (
-          <React.Fragment>
+          <React.Fragment key={chat._id}>
             <Link to={"/chat"}>
               <div className="flex items-center gap-2 px-3 mb-1 shadow bg-background  pt-2 pb-4  border rounded-lg text-foreground">
                 <Avatar className="relative h-10 w-10 top-2">

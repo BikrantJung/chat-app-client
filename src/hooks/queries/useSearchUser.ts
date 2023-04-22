@@ -1,11 +1,12 @@
 import { axios } from "@/lib/axios";
+import { useUserSearchStore } from "@/store/useUserSearchStore";
 import { IUserInfo } from "@/types/user.types";
-import { useQuery } from "@tanstack/react-query";
+import { QueryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-async function fetchPosts(
+async function fetchUsers(
   query: string,
   token?: string
 ): Promise<Omit<IUserInfo, "jwt_token">[]> {
@@ -16,10 +17,18 @@ async function fetchPosts(
   });
   return data;
 }
-function useFetchUsers(query: string, token?: string) {
+function useFetchUsers(token?: string) {
+  const { query } = useUserSearchStore((state) => state);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  return useQuery(["posts", query], () => fetchPosts(query, token), {
+  return useQuery(["users", query], () => fetchUsers(query, token), {
     enabled: !!query,
+    initialData: () => {
+      const cachedUsers = queryClient.getQueryData<
+        Omit<IUserInfo, "jwt_token">[]
+      >(["users", query]);
+      return cachedUsers;
+    },
     onError(error: AxiosError) {
       if (error.message === "Network Error") {
         toast.error("Network Error");

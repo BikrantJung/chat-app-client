@@ -19,16 +19,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "../atoms/avatar";
 import { Skeleton } from "../atoms/skeleton";
 import { useAccessChat } from "@/hooks/mutations/useAccessChat";
 import { NewChatResults } from "../ui/NewChatResult";
+import { useUserSearchStore } from "@/store/useUserSearchStore";
 
 export function NewChatDrawer() {
   const navigate = useNavigate();
+  const { setQuery, query } = useUserSearchStore((state) => state);
   const { userInfo } = useUserStore((state) => state);
-  const [query, setQuery] = useState("");
 
-  const { isFetching, refetch, data } = useFetchUsers(
-    query,
-    userInfo?.jwt_token
-  );
+  const { isFetching, data } = useFetchUsers(userInfo?.jwt_token);
   console.log("Query", query);
 
   const handleQueryChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,13 +36,12 @@ export function NewChatDrawer() {
       console.log(error);
     }
   };
-  console.log(data, "DATA");
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Button size="sm">
           <Plus className="icon" />
-          <span className=" hidden sm:block">New Chat</span>
+          <span className="hidden sm:block">New Chat</span>
         </Button>
       </SheetTrigger>
       <SheetContent position="right">
