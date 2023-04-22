@@ -10,9 +10,7 @@ type AccessChatInput = {
   token?: string;
 };
 
-async function accessChat(
-  chatInput: AccessChatInput
-): Promise<Omit<IChat[], "jwt_token">[]> {
+async function accessChat(chatInput: AccessChatInput): Promise<IChat[]> {
   const { data } = await axios.post(
     `/chat/access-chat`,
     { userId: chatInput.userId },

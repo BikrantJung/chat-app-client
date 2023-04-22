@@ -11,7 +11,7 @@ function RegisterTab() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
-  let [fileUploadData, setFileUploadData] = useState(new FormData());
+  const [fileUploadData, setFileUploadData] = useState(new FormData());
   //   const [loading, setLoading] = useState(false);
   const { data: registerResponse, mutate, isLoading } = useCreateUser();
   async function handleRegister(e: React.FormEvent) {
@@ -40,8 +40,8 @@ function RegisterTab() {
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
       const file = e.target.files[0];
-      const filetype = file.type.split("/").pop()!;
-      if (!imageExtensions.includes(filetype)) {
+      const filetype = file.type.split("/")?.pop();
+      if (!imageExtensions.includes(filetype || "")) {
         if (inputRef.current) {
           inputRef.current.value = "";
         }

@@ -4,15 +4,15 @@ import { Spinner } from "../atoms/spinner";
 
 interface LoadingInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  isLoading?: boolean;
+  isloading?: boolean;
 }
 
 function LoadingInput(props: LoadingInputProps) {
-  const { isLoading = false } = props;
+  const { isloading = false } = props;
   return (
     <div className="relative w-full">
       <Input {...props} />
-      {isLoading && (
+      {isloading && (
         <div className="absolute z-50 top-1/2 -translate-y-1/2 right-4">
           <svg
             width="14"

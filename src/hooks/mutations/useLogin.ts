@@ -4,13 +4,11 @@ import { IUserInfo, IUserLogin } from "@/types/user.types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 async function loginUser(loginInput: IUserLogin) {
   return await axios.post("/user/login", loginInput);
 }
 function useLoginUser() {
   const { setUser } = useUserStore((state) => state);
-  const navigate = useNavigate();
   return useMutation((loginInput: IUserLogin) => loginUser(loginInput), {
     onError(error: AxiosError) {
       if (error.response?.data) {

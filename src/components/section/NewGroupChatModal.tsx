@@ -19,7 +19,8 @@ import { useState } from "react";
 import { GroupResult } from "../ui/GroupResult";
 import { SearchUsers } from "../ui/SearchUsers";
 import { IUserInfo } from "@/types/user.types";
-import LoadingInput from "../elements/LoadingInput";
+import { useCreateGroup } from "@/hooks/mutations/useCreateGroup";
+import { toast } from "react-hot-toast";
 
 type IUser = Omit<IUserInfo, "jwt_token" | "createdAt">;
 
@@ -29,13 +30,24 @@ export function NewGroupChatModal() {
   const { userInfo } = useUserStore((state) => state);
   const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
 
-  const { isFetching, refetch, data } = useFetchUsers(userInfo?.jwt_token);
-
-  console.log("OHIIOOIo");
-
-  console.log(data, "FROM MODEL");
+  const { isFetching, data } = useFetchUsers(userInfo?.jwt_token);
   async function handleQueryChange(e: React.ChangeEvent<HTMLInputElement>) {
     setQuery(e.target.value);
+  }
+  const { mutate, isLoading } = useCreateGroup();
+
+  function handleCreateGroup() {
+    const userArray = selectedUsers.map((item) => item._id);
+
+    if (userArray.length < 1) {
+      toast.error("Select at least one user");
+      return;
+    }
+    mutate({
+      groupName: groupName,
+      users: JSON.stringify(userArray),
+    });
+    return;
   }
 
   return (
@@ -85,7 +97,14 @@ export function NewGroupChatModal() {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button
+            onClick={() => handleCreateGroup()}
+            type="submit"
+            loading={isLoading}
+            disabled={!groupName && !!selectedUsers}
+          >
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

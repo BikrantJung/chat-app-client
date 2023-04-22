@@ -1,6 +1,5 @@
 import React from "react";
 import { Label } from "../atoms/label";
-import { Input } from "../atoms/input";
 import LoadingInput from "../elements/LoadingInput";
 
 interface SearchUsersProps {
@@ -19,7 +18,7 @@ export function SearchUsers(props: SearchUsersProps) {
         {label}
       </Label>
       <LoadingInput
-        isLoading={isLoading}
+        isloading={isLoading}
         id={id}
         value={query}
         onChange={onChange}

@@ -1,7 +1,13 @@
+import { useUserStore } from "@/store/useUserStore";
 import Axios from "axios";
 
+const token = useUserStore.getState().userInfo?.jwt_token;
 export const axios = Axios.create({
   baseURL: "http://localhost:4000/api",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  },
 });
 // axios.interceptors.response.use(
 //   (response) => response, // Return the response for all non-error cases

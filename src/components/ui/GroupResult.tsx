@@ -17,7 +17,6 @@ interface GroupResultProps {
 
 export function GroupResult(props: GroupResultProps) {
   const { selectedUsers, setSelectedUsers, userInfo } = props;
-
   const handleRemoveSelectedUser = (user: IUser) => {
     setSelectedUsers(
       selectedUsers.filter((selectedUser) => selectedUser._id !== user._id)
@@ -34,7 +33,7 @@ export function GroupResult(props: GroupResultProps) {
           <>
             <div className="flex flex-wrap p-2 gap-2">
               {selectedUsers.map((item) => (
-                <Badge key={item._id}>{item.username}</Badge>
+                <Badge key={JSON.stringify(item)}>{item.username}</Badge>
               ))}
             </div>
             <Separator />
@@ -44,8 +43,8 @@ export function GroupResult(props: GroupResultProps) {
         )}
         <div className="p-4">
           {userInfo.map((item) => (
-            <React.Fragment>
-              <div key={item._id} className="flex items-center gap-2">
+            <React.Fragment key={item._id}>
+              <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={item.profilePicture} />
                   <AvatarFallback>{item.username}</AvatarFallback>
@@ -64,18 +63,20 @@ export function GroupResult(props: GroupResultProps) {
                     variant="outline"
                     onClick={() => handleRemoveSelectedUser(item)}
                     size="xs"
+                    className="border-destructive"
                     // disabled={isLoading}
                   >
-                    <Minus className="icon text-red-300" />
+                    <Minus className="icon text-destructive" />
                   </Button>
                 ) : (
                   <Button
                     variant="outline"
                     onClick={() => handleAddSelectedUser(item)}
                     size="xs"
+                    className="border-secondary"
                     // disabled={isLoading}
                   >
-                    <Plus className="icon" />
+                    <Plus className="icon text-secondary" />
                   </Button>
                 )}
               </div>
