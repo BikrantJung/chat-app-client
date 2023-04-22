@@ -1,6 +1,5 @@
 import React from "react";
 import { Input } from "../atoms/input";
-import { Spinner } from "../atoms/spinner";
 
 interface LoadingInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {

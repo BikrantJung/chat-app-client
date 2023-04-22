@@ -3,8 +3,9 @@ import { Button } from "../atoms/button";
 import { Input } from "../atoms/input";
 import { imageExtensions } from "@/lib/imageExtensions";
 import { toast } from "react-hot-toast";
-import axios from "axios";
 import { useCreateUser } from "@/hooks/mutations/useRegister";
+import { AxiosError } from "axios";
+import { error } from "console";
 function RegisterTab() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [username, setUsername] = useState("");
@@ -13,7 +14,7 @@ function RegisterTab() {
   const [profilePicture, setProfilePicture] = useState("");
   const [fileUploadData, setFileUploadData] = useState(new FormData());
   //   const [loading, setLoading] = useState(false);
-  const { data: registerResponse, mutate, isLoading } = useCreateUser();
+  const { mutate, isLoading } = useCreateUser();
   async function handleRegister(e: React.FormEvent) {
     let registeringToast2;
     e.preventDefault();

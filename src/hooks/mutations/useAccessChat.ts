@@ -1,6 +1,6 @@
 import { axios } from "@/lib/axios";
 import { IChat } from "@/types/chat.types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
