@@ -8,5 +8,5 @@ export type IChat = {
   users: IUserInfo[];
   createdAt: string;
   groupAdmin: IUserInfo | null;
-  latestMessages?: IMessage[];
+  latestMessage?: IMessage;
 };

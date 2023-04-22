@@ -1,13 +1,10 @@
-import React from "react";
-import { Separator } from "../atoms/separator";
 import { IChat } from "@/types/chat.types";
-import { ScrollArea } from "../atoms/scroll-area";
-import { Avatar, AvatarImage } from "../atoms/avatar";
+import React, { useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Skeleton } from "../atoms/skeleton";
-import { Button } from "../atoms/button";
-import { Plus } from "iconoir-react";
+import { Avatar, AvatarImage } from "../atoms/avatar";
+import { ScrollArea } from "../atoms/scroll-area";
 import { NewGroupChatModal } from "./NewGroupChatModal";
+import { useUserStore } from "@/store/useUserStore";
 
 interface ChatSidebarProps {
   chats: IChat[];
@@ -16,7 +13,7 @@ interface ChatSidebarProps {
 
 function ChatSidebar(props: ChatSidebarProps) {
   const { chats } = props;
-  let isLoading = true;
+  const { userInfo } = useUserStore((state) => state);
   return (
     <div className="h-full gap-3">
       <div className="flex mb-2 justify-between items-center">
@@ -25,13 +22,18 @@ function ChatSidebar(props: ChatSidebarProps) {
         </h4>
         <NewGroupChatModal />
       </div>
-      <ScrollArea className="h-[80vh] w-full rounded-md">
+      <ScrollArea className="h-[75vh] w-full rounded-md">
         {chats.map((chat) => (
           <React.Fragment key={chat._id}>
             <Link to={"/chat"}>
               <div className="flex items-center gap-2 px-3 mb-1 shadow bg-background  pt-2 pb-4  border rounded-lg text-foreground">
                 <Avatar className="relative h-10 w-10 top-2">
-                  <AvatarImage src="https://icon-library.com/images/anonymous-icon/anonymous-icon-0.jpg"></AvatarImage>
+                  <AvatarImage
+                    src={
+                      chat.users.filter((user) => user._id !== userInfo?._id)[0]
+                        .profilePicture
+                    }
+                  ></AvatarImage>
                 </Avatar>
                 <div className="flex flex-col ">
                   <div className="text-xs ml-auto text-muted-foreground">
@@ -39,18 +41,24 @@ function ChatSidebar(props: ChatSidebarProps) {
                   </div>
                   <div className="flex gap-2 items-start">
                     <div className="flex flex-col">
-                      <h4 className="scroll-m-20 truncate w-44 text-sm font-semibold tracking-tight">
-                        {chat.chatName}
+                      <h4
+                        className={`scroll-m-20 truncate w-44 text-sm font-semibold tracking-tight ${
+                          chat.isGroupChat
+                            ? "text-secondary"
+                            : "text-foreground"
+                        }`}
+                      >
+                        {chat.isGroupChat
+                          ? chat.chatName
+                          : chat.users.filter(
+                              (user) => user._id !== userInfo?._id
+                            )[0].username}
                       </h4>
                       <p className="truncate w-52 text-xs font-semibold">
-                        {
-                          "I'm looking to work with designer that will fulfill my requirements"
-                        }
+                        {chat?.latestMessage?.content}
                       </p>
                     </div>
-                    <div className="translate-y-2 h-4 w-4 text-xs flex items-center justify-center text-destructive-foreground rounded-full bg-destructive">
-                      4
-                    </div>
+                    {/* <div className="translate-y-2 h-4 w-4 text-xs flex items-center justify-center text-destructive-foreground rounded-full bg-destructive"></div> */}
                   </div>
                 </div>
               </div>

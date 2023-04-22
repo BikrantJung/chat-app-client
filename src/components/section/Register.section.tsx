@@ -1,17 +1,14 @@
+import { useCreateUser } from "@/hooks/mutations/useRegister";
+import { imageExtensions } from "@/lib/imageExtensions";
 import React, { useRef, useState } from "react";
+import { toast } from "react-hot-toast";
 import { Button } from "../atoms/button";
 import { Input } from "../atoms/input";
-import { imageExtensions } from "@/lib/imageExtensions";
-import { toast } from "react-hot-toast";
-import { useCreateUser } from "@/hooks/mutations/useRegister";
-import { AxiosError } from "axios";
-import { error } from "console";
 function RegisterTab() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [profilePicture, setProfilePicture] = useState("");
   const [fileUploadData, setFileUploadData] = useState(new FormData());
   //   const [loading, setLoading] = useState(false);
   const { mutate, isLoading } = useCreateUser();
@@ -21,15 +18,15 @@ function RegisterTab() {
 
     try {
       const profilePicUrl = await imageUpload();
-      setProfilePicture(profilePicUrl);
-      registeringToast2 = toast.loading("Creating User...");
 
+      console.log("PROFILE PIC URL", profilePicUrl);
+      registeringToast2 = toast.loading("Creating User...");
       //   Mutate to create user
       mutate({
         email,
         username,
         password,
-        profilePicture,
+        profilePicture: profilePicUrl,
       });
     } catch (error: any) {
       toast.error(error.message);

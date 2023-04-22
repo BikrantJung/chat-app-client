@@ -10,12 +10,12 @@ import { useUserStore } from "@/store/useUserStore";
 import ThemeChangerSwitch from "./ThemeChangerSwitch";
 
 function ProfileDropdown() {
-  const { resetUser } = useUserStore((state) => state);
+  const { resetUser, userInfo } = useUserStore((state) => state);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer" asChild>
         <Avatar>
-          <AvatarImage src="https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?size=626&ext=jpg&ga=GA1.1.909542152.1678622892&semt=sph" />
+          <AvatarImage src={userInfo?.profilePicture} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

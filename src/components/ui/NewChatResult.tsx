@@ -3,11 +3,11 @@ import * as React from "react";
 import { ScrollArea } from "@/components/atoms/scroll-area";
 import { Separator } from "@/components/atoms/separator";
 import { IUserInfo } from "@/types/user.types";
-import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { ChatBubble } from "iconoir-react";
 import { Button } from "../atoms/button";
 import { useAccessChat } from "@/hooks/mutations/useAccessChat";
 import { useUserStore } from "@/store/useUserStore";
+import { Avatar, AvatarFallback, AvatarImage } from "../atoms/avatar";
 
 const tags = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`

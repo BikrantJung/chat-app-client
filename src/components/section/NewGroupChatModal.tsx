@@ -39,8 +39,8 @@ export function NewGroupChatModal() {
   function handleCreateGroup() {
     const userArray = selectedUsers.map((item) => item._id);
 
-    if (userArray.length < 1) {
-      toast.error("Select at least one user");
+    if (userArray.length < 2) {
+      toast.error("Select at least two users");
       return;
     }
     mutate({
