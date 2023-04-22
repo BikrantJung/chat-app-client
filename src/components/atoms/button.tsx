@@ -20,8 +20,9 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-10 py-2 px-3",
-        sm: "h-9 px-3 rounded-md text-xs",
-        lg: "h-11 px-8 rounded-md",
+        xs: "h-7 px-1 text-xs",
+        sm: "h-9 px-3 text-xs",
+        lg: "h-11 px-8",
       },
     },
     defaultVariants: {
@@ -47,7 +48,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading && (
-          <div className="absolute">
+          <div className="absolute z-50">
             <svg
               width="14"
               height="14"

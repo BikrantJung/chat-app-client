@@ -2,7 +2,7 @@ export type IUserRegister = {
   email: string;
   username: string;
   password: string;
-  profilePicture?: String;
+  profilePicture?: string;
 };
 export type IUserLogin = {
   email: string;

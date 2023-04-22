@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 
-export interface ButtonProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement> {
   spinnerColor?: string;
 }
-export function Spinner(props: ButtonProps) {
+export function Spinner(props: SpinnerProps) {
   const { className, spinnerColor = "black" } = props;
   return (
     <div className={cn("absolute", className)} {...props}>
