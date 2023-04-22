@@ -12,6 +12,7 @@ import { QueryCache } from "@tanstack/react-query";
 interface SendMessageInput {
   chatId?: string;
   content: string;
+  profilePicture?: string;
   token?: string;
 }
 
@@ -88,6 +89,7 @@ function useSendMessage(chatId?: string) {
           _id: new Date(),
           sender: {
             _id: userInfo?._id,
+            profilePicture: variables?.profilePicture,
           },
           content: variables.content,
         };

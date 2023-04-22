@@ -33,7 +33,7 @@ function ProfileDropdown() {
           className="gap-1"
           onClick={() => {
             resetUser();
-            queryCache.clear();
+            queryClient.clear();
           }}
         >
           <LogOut className="icon" /> <span>Log out</span>
