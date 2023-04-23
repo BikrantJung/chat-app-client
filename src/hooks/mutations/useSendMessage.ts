@@ -1,4 +1,5 @@
 import { axios } from "@/lib/axios";
+import { socket } from "@/lib/socket";
 import { useUserStore } from "@/store/useUserStore";
 import { IChat } from "@/types/chat.types";
 import { IMessage } from "@/types/message.types";
@@ -7,7 +8,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { QueryCache } from "@tanstack/react-query";
 
 interface SendMessageInput {
   chatId?: string;
@@ -46,6 +46,7 @@ function useSendMessage(chatId?: string) {
       },
 
       onSuccess({ data }: { data: IMessage }) {
+        socket.emit("stop-typing", chatId);
         queryClient.setQueryData(
           ["messages", chatId],
           (oldData: IMessage[] | undefined) => {
@@ -68,7 +69,6 @@ function useSendMessage(chatId?: string) {
               const index = oldChatsData.findIndex(
                 (item) => item._id === chatId
               );
-              console.log("Index of current chat", index);
               if (index !== 1) {
                 const existingChat = oldChatsData[index];
                 const updatedChat: IChat = {
@@ -83,6 +83,7 @@ function useSendMessage(chatId?: string) {
             return [];
           }
         );
+        socket.emit("new-message", data);
       },
       onMutate(variables) {
         const fakeMessage = {

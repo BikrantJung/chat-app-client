@@ -1,15 +1,25 @@
+import { useSendMessage } from "@/hooks/mutations/useSendMessage";
 import { useFetchMessages } from "@/hooks/queries/useFetchMessages";
 import { useFetchSingleChat } from "@/hooks/queries/useFetchSingleChat";
+import { socket } from "@/lib/socket";
+import { useChatIdStore } from "@/store/useResponsiveChatStore";
 import { useUserStore } from "@/store/useUserStore";
+import { IChat } from "@/types/chat.types";
+import { IMessage } from "@/types/message.types";
 import { IUserInfo } from "@/types/user.types";
-import { DownloadCircle, SendDiagonal } from "iconoir-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { MoveLeft, SendDiagonal } from "iconoir-react";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../atoms/avatar";
 import { Button } from "../atoms/button";
 import { Input } from "../atoms/input";
-import { useSendMessage } from "@/hooks/mutations/useSendMessage";
+
+let selectedChat: IChat | undefined;
 function ChatBox() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { chatId: storeChatId, setChatId } = useChatIdStore((state) => state);
   const chatWrapperDiv = useRef<HTMLDivElement>(null);
   const { chatId } = useParams();
   const { userInfo } = useUserStore((state) => state);
@@ -17,7 +27,10 @@ function ChatBox() {
     useFetchMessages(chatId);
   const { data: singleChatData, isLoading } = useFetchSingleChat(chatId);
   const [messageContent, setMessageContent] = useState("");
+  const [socketConnected, setSocketConnected] = useState(false);
   const [scrollButtomToggle, setScrollButtomToggle] = useState(false);
+  const [typing, setTyping] = useState("");
+  const [roomData, setRoomData] = useState({ userRoomId: "", chatId: "" });
   const [anotherUserData, setAnotherUserData] = useState<
     Omit<IUserInfo, "jwt_token" | "createdAt">
   >({
@@ -27,12 +40,21 @@ function ChatBox() {
     _id: "",
   });
 
+  useEffect(() => {
+    setChatId(chatId ? chatId : "");
+  }, [chatId, setChatId]);
+
   const {
     mutate,
     isSuccess,
     isLoading: isSendingMessage,
   } = useSendMessage(chatId);
   //   Get another user's data
+  useEffect(() => {
+    socket.emit("setup", userInfo);
+    socket.on("connected", () => setSocketConnected(true));
+  }, [userInfo]);
+
   useEffect(() => {
     if (singleChatData && !isLoading) {
       const _anotherUser = singleChatData.users.filter(
@@ -42,19 +64,6 @@ function ChatBox() {
       setAnotherUserData(_anotherUser);
     }
   }, [singleChatData, userInfo, isLoading]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      if (chatWrapperDiv.current) {
-        chatWrapperDiv.current.scrollTop = chatWrapperDiv.current.scrollHeight;
-      }
-    }
-  }, [isSuccess]);
-  useEffect(() => {
-    if (chatWrapperDiv.current) {
-      chatWrapperDiv.current.scrollTop = chatWrapperDiv.current.scrollHeight;
-    }
-  }, [chatWrapperDiv]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop > 800) {
@@ -74,35 +83,115 @@ function ChatBox() {
       setMessageContent("");
     }
   };
+  useEffect(() => {
+    if (chatWrapperDiv.current) {
+      chatWrapperDiv.current.scrollTop = chatWrapperDiv.current.scrollHeight;
+    }
+  }, [messagesData]);
+
+  useEffect(() => {
+    socket.on("typing", (user) => {
+      setTyping(`${user} is typing`);
+    });
+    socket.on("stop-typing", () => setTyping(""));
+    socket.on("joined-chat", (chatId) => {
+      setRoomData((prevData) => ({ ...prevData, chatId }));
+    });
+    selectedChat = singleChatData;
+    socket.on("message-received", (newMessage) => {
+      if (!selectedChat || selectedChat._id !== newMessage.chat._id) {
+        console.log("I will receive notification");
+      } else {
+        // Add to list of messages
+        queryClient.setQueryData(
+          ["messages", chatId],
+          (oldData: IMessage[] | undefined) => {
+            if (oldData) {
+              const exists = oldData.some((item) => {
+                if (item._id === newMessage._id) {
+                  return true;
+                }
+              });
+              if (exists) {
+                return oldData;
+              }
+              return [...oldData, newMessage];
+            } else {
+              return [newMessage];
+            }
+          }
+
+          // Message sent Data
+        );
+      }
+    });
+  });
+
+  const handleMessageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessageContent(e.target.value);
+    if (!socketConnected) return;
+    if (!typing) {
+      socket.emit("typing", selectedChat?._id, userInfo?.username);
+    }
+
+    const lastTypingTime = new Date().getTime();
+    const timerLength = 3000;
+    setTimeout(() => {
+      console.log("TIMEOUT COMPLEtE, hide ui");
+      const timeNow = new Date().getTime();
+      const timeDifference = timeNow - lastTypingTime;
+      if (timeDifference >= timerLength) {
+        setTyping("");
+        socket.emit("stop-typing", selectedChat?._id);
+      }
+    }, timerLength);
+  };
 
   if (!chatId) return <div>Chat Not Found</div>;
   return (
     <>
       {!isLoading && !!singleChatData ? (
-        <div className="flex-[3_3_0%] rounded bg-background p-4 text-foreground hidden lg:flex flex-col">
-          <div className="flex border-b pb-4 mb-4 items-center w-full">
-            {!singleChatData.isGroupChat ? (
-              <div className="flex gap-2 items-center">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage
-                    src={anotherUserData.profilePicture}
-                  ></AvatarImage>
-                  <AvatarFallback>{anotherUserData.username}</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col">
-                  <h4 className="scroll-m-20 text-sm font-semibold tracking-tight">
-                    {anotherUserData.username}
-                  </h4>
-                  <p className="text-xs text-muted-foreground">
-                    {anotherUserData.email}
-                  </p>
+        <div
+          className={
+            "flex-[3_3_0%] rounded bg-background p-4 text-foreground flex flex-col"
+          }
+        >
+          <div className="flex border-b pb-4 mb-4 items-center gap-4">
+            <Button
+              variant={"outline"}
+              className="lg:hidden"
+              onClick={() => {
+                navigate("/chat");
+                setChatId("");
+              }}
+            >
+              {" "}
+              <MoveLeft className="icon" />{" "}
+            </Button>
+            <div className="flex items-center w-full">
+              {!singleChatData.isGroupChat ? (
+                <div className="flex gap-2 items-center">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={anotherUserData.profilePicture}
+                    ></AvatarImage>
+                    <AvatarFallback>{anotherUserData.username}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <h4 className="scroll-m-20 text-sm font-semibold tracking-tight">
+                      {anotherUserData.username}
+                    </h4>
+                    <p className="text-xs text-muted-foreground">
+                      {anotherUserData.email}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <h4 className="scroll-m-20 font-semibold tracking-tight">
-                {singleChatData.chatName}
-              </h4>
-            )}
+              ) : (
+                <h4 className="scroll-m-20 font-semibold tracking-tight">
+                  {singleChatData.chatName}
+                </h4>
+              )}
+            </div>{" "}
           </div>
 
           {messagesData ? (
@@ -164,10 +253,20 @@ function ChatBox() {
           ) : (
             ""
           )}
-          <div className="">
+          <div className="mt-auto flex flex-col gap-2 ">
+            <div
+              className={`flex items-center gap-2 bg-muted p-1 mr-auto px-3 rounded-lg transition ${
+                typing ? "translate-y-0" : "translate-y-[120%]"
+              }`}
+            >
+              <span className="text-xs text-muted-foreground">
+                {typing ? typing : "Stopped Typing"}
+              </span>
+            </div>
+
             <form
               onSubmit={handleSendMessage}
-              className="flex items-center gap-2"
+              className="flex bg-blue-300 relative z-40 items-center gap-2"
             >
               <Avatar className="h-8 w-8">
                 <AvatarImage src={userInfo?.profilePicture}></AvatarImage>
@@ -176,7 +275,7 @@ function ChatBox() {
               <Input
                 className="bg-muted"
                 value={messageContent}
-                onChange={(e) => setMessageContent(e.target.value)}
+                onChange={(e) => handleMessageInputChange(e)}
                 placeholder="Your Message..."
               />
               <Button

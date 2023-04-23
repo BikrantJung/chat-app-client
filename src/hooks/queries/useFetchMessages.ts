@@ -1,4 +1,5 @@
 import { axios } from "@/lib/axios";
+import { socket } from "@/lib/socket";
 import { useUserStore } from "@/store/useUserStore";
 import { IMessage } from "@/types/message.types";
 import { useQuery } from "@tanstack/react-query";
@@ -31,6 +32,9 @@ function useFetchMessages(chatId?: string) {
             toast.error(JSON.stringify(item))
           );
         }
+      },
+      onSuccess() {
+        socket.emit("join-chat", chatId);
       },
     }
   );

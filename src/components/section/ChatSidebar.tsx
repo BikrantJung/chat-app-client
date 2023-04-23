@@ -15,8 +15,6 @@ function ChatSidebar(props: ChatSidebarProps) {
   const { chats } = props;
   const { userInfo } = useUserStore((state) => state);
 
-  console.log("CHATS IN CLIENT", chats);
-
   return (
     <div className="h-full gap-3">
       <div className="flex mb-2 justify-between items-center">

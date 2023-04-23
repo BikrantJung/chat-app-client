@@ -19,7 +19,6 @@ function RegisterTab() {
     try {
       const profilePicUrl = await imageUpload();
 
-      console.log("PROFILE PIC URL", profilePicUrl);
       registeringToast2 = toast.loading("Creating User...");
       //   Mutate to create user
       mutate({
@@ -60,7 +59,6 @@ function RegisterTab() {
   async function imageUpload() {
     let uploadingToast;
     if (fileUploadData.has("file")) {
-      console.log(fileUploadData, "FOUND");
       try {
         uploadingToast = toast.loading("Uploading image...");
         const response = await fetch(

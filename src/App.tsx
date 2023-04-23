@@ -7,8 +7,10 @@ import Login from "./components/pages/Login.page";
 import { Main } from "./components/pages/Main.page";
 import { useThemeStore } from "./store/useThemeStore";
 import ChatBox from "./components/section/ChatBox";
+import { useChatIdStore } from "./store/useResponsiveChatStore";
 
 export function App({ children }: { children: React.ReactNode }) {
+  const { chatId } = useChatIdStore((state) => state);
   const { theme } = useThemeStore((state) => state);
   const [queryClient] = useState(
     () =>

@@ -31,10 +31,6 @@ export function NewChatDrawer() {
 
   const handleQueryChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-    try {
-    } catch (error) {
-      console.log(error);
-    }
   };
   return (
     <Sheet>

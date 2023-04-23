@@ -6,25 +6,25 @@ import { useFetchChats } from "@/hooks/queries/useFetchAllChats";
 import Navbar from "../section/Navbar";
 import ChatSidebar from "../section/ChatSidebar";
 import { Skeleton } from "../atoms/skeleton";
+import { useChatIdStore } from "@/store/useResponsiveChatStore";
 
 function Main() {
   const { setUser, userInfo } = useUserStore((state) => state);
-
+  const { chatId } = useChatIdStore((state) => state);
   const navigate = useNavigate();
   const { data, error, isLoading } = useFetchChats(userInfo?.jwt_token);
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    console.log("FROM MAIN MAGE");
     if (!userInfo) {
-      console.log("No user Info");
       navigate("/");
     }
-    console.log("User Info");
     setLoading(false);
   }, [userInfo]);
+  useEffect(() => {
+    if (chatId) navigate(`/chat/${chatId}`);
+  }, [chatId]);
 
-  console.log("CHATS FROM MAIN================>", data);
   return (
     <>
       {" "}
@@ -35,9 +35,14 @@ function Main() {
           <Navbar />
           {data?.length ? (
             <div className="flex px-8 gap-4 flex-1 justify-center lg:justify-normal ">
-              <div className="flex-1 border-r pr-3 max-w-max ">
+              <div
+                className={`border-r flex-1  pr-3 max-w-max ${
+                  chatId ? "hidden lg:flex" : "flex"
+                }`}
+              >
                 <ChatSidebar chats={data} isLoading={isLoading} />
               </div>
+
               <Outlet />
             </div>
           ) : (
